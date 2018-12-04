@@ -1,0 +1,22 @@
+{
+  "producers": [
+    {
+      "id": "ewb_granatweg6bern_grid_export3p"
+    },
+    {
+      "id": "ewb_granatweg8bern_grid_export3p"
+    },
+    {
+      "id": "ewb_granatweg9bern_grid_export3p"
+    },
+    {
+      "id": "ewb_granatweg10bern_grid_export3p"
+    },
+    {
+      "id": "ewb_granatweg11bern_grid_export3p"
+    },
+    {
+      "id": "ewb_granatweg13bern_grid_export3p"
+    }
+  ]
+}

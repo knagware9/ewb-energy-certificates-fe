@@ -1,4 +1,4 @@
-# ewb-origin-lol
+# ewb-origin-fe
 
 ## Project setup
 ```
