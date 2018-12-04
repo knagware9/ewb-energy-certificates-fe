@@ -1,0 +1,28 @@
+{
+  "consumers": [
+    {
+      "id": "ewb_kohlestromallee6bern_grid_import3p",
+      "name": "Kohlestromallee 6"
+    },
+    {
+      "id": "ewb_kohlestromallee8bern_grid_import3p",
+      "name": "Kohlestromallee 8"
+    },
+    {
+      "id": "ewb_kohlestromallee9bern_grid_import3p",
+      "name": "Kohlestromallee 9"
+    },
+    {
+      "id": "ewb_kohlestromallee10bern_grid_import3p",
+      "name": "Kohlestromallee 10"
+    },
+    {
+      "id": "ewb_kohlestromallee11bern_grid_import3p",
+      "name": "Kohlestromallee 11"
+    },
+    {
+      "id": "ewb_kohlestromallee13bern_grid_import3p",
+      "name": "Kohlestromallee 13"
+    }
+  ]
+}
