@@ -286,7 +286,7 @@
                 let that = this;
                 axios({
                     method: 'put',
-                    url: 'http://localhost:8000/user/buyer/update',
+                    url: 'http://localhost:8000/user/buyer/buying-price/update',
                     data: postBody,
                     config: {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                 })
@@ -303,7 +303,7 @@
                 let that = this;
                 axios({
                     method: 'get',
-                    url: 'http://localhost:8000/user/buyer',
+                    url: 'http://localhost:8000/user/buyer/get',
                 })
                     .then(function (response) {
                         that.buyingPrice = response.data.buyingPrice

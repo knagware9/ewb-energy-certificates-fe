@@ -14,267 +14,58 @@
             </v-flex>
 
 
-
             <v-flex xs12>
                 <h2 class="display-2 font-weight-bold mb-3">Current market</h2>
             </v-flex>
 
-
-            <v-flex mb-4>
-                <h2>
-                    Unmet demand
-                </h2>
-            </v-flex>
-
             <v-flex xs12>
-                <v-data-table
-                        :headers="unmetDemand.headers"
-                        :items="unmetDemand.data"
-                        hide-actions
-                        class="elevation-1"
-                >
-                    <template slot="items" slot-scope="props">
-                        <td class="text-xs-left">{{ props.item.id }}</td>
-                        <td class="text-xs-left">{{ props.item.user }}</td>
-                        <td class="text-xs-left">{{ props.item.kwh }}</td>
-                        <td class="text-xs-left">{{ props.item.price }}</td>
-                    </template>
-                </v-data-table>
-            </v-flex>
-
-            <v-flex mb-4>
-                <h2>
-                    Unsold certificates
-                </h2>
-            </v-flex>
-
-            <v-flex xs12>
-                <v-data-table
-                        :headers="seller.certificates.headers"
-                        :items="seller.certificates.data"
-                        hide-actions
-                        class="elevation-1"
-                >
-                    <template slot="items" slot-scope="props">
-                        <td class="text-xs-left">{{ props.item.unipi.name }}</td>
-                        <td class="text-xs-left">{{ props.item.id }}</td>
-                        <td class="text-xs-left">{{ props.item.price }}</td>
-                        <td class="text-xs-left">{{ props.item.generated }}</td>
-                        <td class="text-xs-left">{{ props.item.sold }}</td>
-                    </template>
-                </v-data-table>
+                    <line-chart v-if="loaded" :chart-data="certificatePrices" :chart-labels="labels"></line-chart>
             </v-flex>
         </v-layout>
     </v-container>
 </template>
 
 <script>
-    import axios from 'axios';
+    import axios from 'axios'
+    import LineChart from '@/components/LineChart'
 
     export default {
-        data: () => ({
-            unmetDemand: {
-                headers: [
-                    'id', 'user', 'kwhs', 'price'
-                ],
-                data: [
-                    {
-                        id: '08040837089cdf46631a10aca5258e16',
-                        user: 'buyer',
-                        kwh: '30',
-                        price: '0.01'
-                    },{
-                        id: '35309226eb45ec366ca86a4329a2b7c3',
-                        user: 'buyer2',
-                        kwh: '8',
-                        price: '0.02'
-                    },
-                    {
-                        id: '35309226eb45ec366ca86a4329a2b7c3',
-                        user: 'buyer2',
-                        kwh: '10',
-                        price: '0.01'
-                    },
-                ]
-            },
-
-            sellingPrice: 0.00,
-            exportUnipi: '',
-            exportKwhs: 0,
-            toolbar: {
-                title: 'Certificate seller'
-            },
-            producers: {
-                data: [
-                    {
-                        id: "ewb_granatweg6bern_grid_export3p",
-                        name: "Granatweg 6"
-                    },
-                    {
-                        id: "ewb_granatweg8bern_grid_export3p",
-                        name: "Granatweg 8"
-                    },
-                    {
-                        id: "ewb_granatweg9bern_grid_export3p",
-                        name: "Granatweg 9"
-                    },
-                    {
-                        id: "ewb_granatweg10bern_grid_export3p",
-                        name: "Granatweg 10"
-                    },
-                    {
-                        id: "ewb_granatweg11bern_grid_export3p",
-                        name: "Granatweg 11"
-                    },
-                    {
-                        id: "ewb_granatweg13bern_grid_export3p",
-                        name: "Granatweg 13"
-                    }
-                ]
-            },
-            consumers: {
-                data: [
-                    {
-                        id: "ewb_kohlestromallee6bern_grid_import3p",
-                        name: "Kohlestromallee 6"
-                    },
-                    {
-                        id: "ewb_kohlestromallee8bern_grid_import3p",
-                        name: "Kohlestromallee 8"
-                    },
-                    {
-                        id: "ewb_kohlestromallee9bern_grid_import3p",
-                        name: "Kohlestromallee 9"
-                    },
-                    {
-                        id: "ewb_kohlestromallee10bern_grid_import3p",
-                        name: "Kohlestromallee 10"
-                    },
-                    {
-                        id: "ewb_kohlestromallee11bern_grid_import3p",
-                        name: "Kohlestromallee 11"
-                    },
-                    {
-                        id: "ewb_kohlestromallee13bern_grid_import3p",
-                        name: "Kohlestromallee 13"
-                    }
-                ]
-            },
-            seller: {
-                certificates: {
-                    headers: [
-                        {text: 'Unipi', value: 'unipi'},
-                        {text: 'Id', value: 'id'},
-                        {text: 'Price', value: 'price'},
-                        {text: 'Generated', value: 'generated'},
-                        {text: 'Sold', value: 'sold'},
-                    ],
-                    data: [
-                        {
-                            id: '932828fae3ef07b7fe8c7300b061f765',
-                            price: '0.02',
-                            generated: '2018-12-03 22:41',
-                            sold: '',
-                            unipi:
-                                {
-                                    name: 'UniPi1 - Hauptstrasse 342'
-                                }
-                        },
-                        {
-                            id: 'afe9bfdea0c7ea66d638e56e158b192b',
-                            price: '0.03',
-                            generated: '2018-12-02 22:41',
-                            sold: '',
-                            unipi:
-                                {
-                                    name: 'UniPi2 - Hauptstrasse 344'
-                                }
-                        },
-                        {
-                            id: '932828fae3ef07b7fe8c7300b061f745',
-                            price: '0.04',
-                            generated: '2018-12-01 22:41',
-                            sold: '2018-12-02 22:41',
-                            unipi:
-                                {
-                                    name: 'UniPi2 - Hauptstrasse 344'
-                                }
-                        },
-                        {
-                            id: '28898a6cf5301fc6aa649355e089ebe4',
-                            price: '0.01',
-                            generated: '2018-11-30 22:41',
-                            sold: '2018-11-30 23:41',
-                            unipi:
-                                {
-                                    name: 'UniPi1 - Hauptstrasse 342'
-                                }
-                        }
-                    ]
-                }
+        components: {
+            LineChart
+        },
+        props: {},
+        data() {
+            return {
+                package: null,
+                period: 'last-month',
+                loaded: false,
+                certificatePrices: [],
+                showError: false,
+                labels: [],
             }
-        }),
+        },
+        mounted() {
+            this.requestData()
+        },
         methods: {
-            setPrice() {
-                let postBody = {
-                    sellingPrice: this.sellingPrice
-                };
-                let that = this;
-                axios({
-                    method: 'put',
-                    url: 'http://localhost:8000/user/seller/update',
-                    data: postBody,
-                    config: {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
-                })
-                    .then(function (response) {
-                        if (response.data === 'User updated successfully!') {
-                            that.priceUpdateSuccess.value = 'true'
-                        }
-                    })
-                    .catch(e => {
-                        console.log(e);
-                    });
+            resetState() {
+                this.loaded = false
+                this.showError = false
             },
-            getPrice() {
-                let that = this;
-                axios({
-                    method: 'get',
-                    url: 'http://localhost:8000/user/seller',
-                })
-                    .then(function (response) {
-                        that.sellingPrice = response.data.sellingPrice
+            requestData() {
+                this.resetState()
+                axios.get('https://www.4eyes.ch/certificates.json')
+                    .then(response => {
+                        console.log(response.data)
+                        this.certificatePrices = response.data.certificates.map(certificate => certificate.price*100),
+                        this.labels = new Array(50),
+                        this.loaded = true
                     })
-                    .catch(e => {
-                        console.log(e);
-                    });
-            },
-            generateCertificates() {
-                this.getPrice()
-                let postBody = {
-                    sellingPrice: this.sellingPrice,
-                    kwhs: this.exportKwhs,
-                    unipi: this.exportUnipi
-                };
-                let that = this;
-                axios({
-                    method: 'post',
-                    url: 'http://localhost:8000/user/seller/update',
-                    data: postBody,
-                    config: {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
-                })
-                    .then(function (response) {
-                        if (response.data === 'User updated successfully!') {
-                            that.priceUpdateSuccess.value = 'true'
-                        }
+                    .catch(err => {
+                        this.errorMessage = err.response.data.error
+                        this.showError = true
                     })
-                    .catch(e => {
-                        console.log(e);
-                    });
             }
         }
     }
 </script>
-
-<style>
-
-</style>

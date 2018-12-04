@@ -283,7 +283,7 @@
                 let that = this;
                 axios({
                     method: 'get',
-                    url: 'http://localhost:8000/user/seller',
+                    url: 'http://localhost:8000/user/seller/get',
                 })
                     .then(function (response) {
                         that.sellingPrice = response.data.sellingPrice
