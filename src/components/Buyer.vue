@@ -226,11 +226,25 @@
             }
         }),
         mounted() {
-            this.getMyDemands()
-                .then(
-                    this.getMyCertificates
-                );
-            this.getPrice();
+            this.getMyDemands(function (that) {
+                let dataLen = that.demands.data.length;
+                for (let i = 0; i < dataLen; i++) {
+                    axios({
+                        method: 'get',
+                        url: 'http://localhost:8000/certificate/getAllByDemand/' + that.demands.data[i].id,
+                    })
+                        .then(function (response) {
+                            if (response.data.length > 0) {
+                                // that.certificates.data.concat(response.data);
+                                that.certificates.data = that.certificates.data.concat(response.data);
+                            }
+                        })
+                        .catch(e => {
+                            console.log(e);
+                        });
+                }
+                that.getPrice();
+            });
         },
         methods: {
             setPrice() {
@@ -287,7 +301,7 @@
                         console.log(e);
                     });
             },
-            getMyDemands() {
+            async getMyDemands(callback) {
                 let that = this;
                 let dataLen = this.consumers.data.length;
                 let i = 0;
@@ -300,6 +314,7 @@
                             if (response.data.length > 0) {
                                 // that.certificates.data.concat(response.data);
                                 that.demands.data = that.demands.data.concat(response.data);
+                                callback(that);
                             }
 
                         })

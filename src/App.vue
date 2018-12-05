@@ -36,13 +36,13 @@
                 </v-list-tile>
             </v-list>
         </v-navigation-drawer>
-        <v-toolbar app>
+        <!--<v-toolbar app>
             <v-toolbar-title class="headline text-uppercase">
                 <span>EWB energy certificate platform</span>
             </v-toolbar-title>
             <v-spacer></v-spacer>
 
-        </v-toolbar>
+        </v-toolbar>-->
 
         <v-content>
             <v-fade-transition mode="out-in">
