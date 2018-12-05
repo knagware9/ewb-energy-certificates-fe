@@ -9,38 +9,43 @@
                         :src="require('../assets/logo-grey.svg')"
                         class="my-3"
                         contain
-                        height="200"
+                        height="150"
                 ></v-img>
             </v-flex>
-
             <v-flex xs12>
-                <h2 class="display-2 font-weight-bold mb-3">Current market</h2>
+                <h1 class="display-2 font-weight-bold mb-3">
+                    EWB energy certificate trading platform
+                </h1>
+                <p>Based on Hyperledger Fabric Blockchain Technology</p>
             </v-flex>
 
+            <v-layout row justify-space-between>
+                <v-flex xs2>
+                </v-flex>
+                <v-flex xs3>
+                    <v-card color="#E8800F" style="display: flex; align-items: center; justify-content: center;">
+                        <v-card-title primary-title>
+                            <div>
+                                <h3 class="headline mb-0">{{ numberOfCertificates }} KWh</h3>
+                                <div> traded</div>
+                            </div>
+                        </v-card-title>
+                    </v-card>
+                </v-flex>
 
-            <v-flex xs4 sm2 offset-sm3>
-                <v-card color="#E8800F" style="display: flex; align-items: center; justify-content: center;">
-                    <v-card-title primary-title>
-                        <div>
-                            <h3 class="headline mb-0">{{ numberOfCertificates }}</h3>
-                            <div># KWh</div>
-                        </div>
-                    </v-card-title>
-
-                </v-card>
-            </v-flex>
-
-            <v-flex xs6 sm2 offset-sm1>
-                <v-card color="#E8800F" style="display: flex; align-items: center; justify-content: center;">
-                    <v-card-title primary-title>
-                        <div>
-                            <h3 class="headline mb-0">{{ totalRevenue }}</h3>
-                            <div>CHF earned</div>
-                        </div>
-                    </v-card-title>
-
-                </v-card>
-            </v-flex>
+                <v-flex xs3>
+                    <v-card color="#E8800F" style="display: flex; align-items: center; justify-content: center;">
+                        <v-card-title primary-title>
+                            <div>
+                                <h3 class="headline mb-0">CHF {{ totalRevenue }}</h3>
+                                <div> earned</div>
+                            </div>
+                        </v-card-title>
+                    </v-card>
+                </v-flex>
+                <v-flex xs2>
+                </v-flex>
+            </v-layout>
 
             <v-flex xs12>
                 <div style="height: 30px"></div>
@@ -174,10 +179,10 @@
                 len = this.salesData.length;
                 let i;
                 let revenue = 0;
-                for(i = 0; i < len; i++) {
+                for (i = 0; i < len; i++) {
                     revenue += parseInt(this.salesData[i]);
                 }
-                this.totalRevenue = revenue/100;
+                this.totalRevenue = revenue / 100;
             }
         }
     }

@@ -9,7 +9,7 @@
                         :src="require('../assets/logo-grey.svg')"
                         class="my-3"
                         contain
-                        height="200"
+                        height="150"
                 ></v-img>
             </v-flex>
 
