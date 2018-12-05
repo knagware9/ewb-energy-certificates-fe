@@ -94,23 +94,22 @@
 
             <v-flex xs12>
                 <h2>
-                    Your unmet demand
+                    Your demands
                 </h2>
             </v-flex>
 
             <v-flex xs12>
                 <v-data-table
-                        :headers="seller.certificates.headers"
-                        :items="seller.certificates.data"
+                        :headers="demands.headers"
+                        :items="demands.data"
                         hide-actions
                         class="elevation-1"
                 >
                     <template slot="items" slot-scope="props">
-                        <td class="text-xs-left">{{ props.item.unipi.name }}</td>
+                        <td class="text-xs-left">{{ props.item.unipi }}</td>
                         <td class="text-xs-left">{{ props.item.id }}</td>
+                        <td class="text-xs-left">{{ props.item.kwh }}</td>
                         <td class="text-xs-left">{{ props.item.price }}</td>
-                        <td class="text-xs-left">{{ props.item.generated }}</td>
-                        <td class="text-xs-left">{{ props.item.sold }}</td>
                     </template>
                 </v-data-table>
             </v-flex>
@@ -123,36 +122,19 @@
 
             <v-flex xs12>
                 <v-data-table
-                        :headers="seller.certificates.headers"
-                        :items="seller.certificates.data"
+                        :headers="certificates.headers"
+                        :items="certificates.data"
                         hide-actions
                         class="elevation-1"
                 >
                     <template slot="items" slot-scope="props">
-                        <td class="text-xs-left">{{ props.item.unipi.name }}</td>
+                        <td class="text-xs-left">{{ props.item.unipi }}</td>
                         <td class="text-xs-left">{{ props.item.id }}</td>
-                        <td class="text-xs-left">{{ props.item.price }}</td>
-                        <td class="text-xs-left">{{ props.item.generated }}</td>
-                        <td class="text-xs-left">{{ props.item.sold }}</td>
+                        <td class="text-xs-left">{{ props.item.minimalPrice }}</td>
+                        <td class="text-xs-left">{{ props.item.sellingPrice }}</td>
                     </template>
                 </v-data-table>
             </v-flex>
-            <!--
-                        <v-flex xs12>
-                            <h2>Producers</h2>
-                            <v-data-table
-                                    :headers="producers.headers"
-                                    :items="producers.data"
-                                    hide-actions
-                                    class="elevation-1"
-                            >
-                                <template slot="items" slot-scope="props">
-                                    <td class="text-xs-left">{{ props.item.id }}</td>
-                                </template>
-                            </v-data-table>
-                        </v-flex>
-
-                        -->
         </v-layout>
     </v-container>
 </template>
@@ -224,60 +206,32 @@
                     }
                 ]
             },
-            seller: {
-                certificates: {
-                    headers: [
-                        {text: 'Unipi', value: 'unipi'},
-                        {text: 'Id', value: 'id'},
-                        {text: 'Price', value: 'price'},
-                        {text: 'Generated', value: 'generated'},
-                        {text: 'Sold', value: 'sold'},
-                    ],
-                    data: [
-                        {
-                            id: '932828fae3ef07b7fe8c7300b061f765',
-                            price: '0.02',
-                            generated: '2018-12-03 22:41',
-                            sold: '',
-                            unipi:
-                                {
-                                    name: 'UniPi1 - Hauptstrasse 342'
-                                }
-                        },
-                        {
-                            id: 'afe9bfdea0c7ea66d638e56e158b192b',
-                            price: '0.03',
-                            generated: '2018-12-02 22:41',
-                            sold: '',
-                            unipi:
-                                {
-                                    name: 'UniPi2 - Hauptstrasse 344'
-                                }
-                        },
-                        {
-                            id: '932828fae3ef07b7fe8c7300b061f745',
-                            price: '0.04',
-                            generated: '2018-12-01 22:41',
-                            sold: '2018-12-02 22:41',
-                            unipi:
-                                {
-                                    name: 'UniPi2 - Hauptstrasse 344'
-                                }
-                        },
-                        {
-                            id: '28898a6cf5301fc6aa649355e089ebe4',
-                            price: '0.01',
-                            generated: '2018-11-30 22:41',
-                            sold: '2018-11-30 23:41',
-                            unipi:
-                                {
-                                    name: 'UniPi1 - Hauptstrasse 342'
-                                }
-                        }
-                    ]
-                }
+            certificates: {
+                headers: [
+                    {text: 'Unipi', value: 'unipi'},
+                    {text: 'Id', value: 'id'},
+                    {text: 'Minimal price', value: 'minimalPrice'},
+                    {text: 'Price sold', value: 'sellingPrice'},
+                ],
+                data: []
+            },
+            demands: {
+                headers: [
+                    {text: 'Unipi', value: 'unipi'},
+                    {text: 'Id', value: 'id'},
+                    {text: 'KWh', value: 'kwh'},
+                    {text: 'Price', value: 'price'}
+                ],
+                data: []
             }
         }),
+        mounted() {
+            this.getMyDemands()
+                .then(
+                    this.getMyCertificates
+                );
+            this.getPrice();
+        },
         methods: {
             setPrice() {
                 let postBody = {
@@ -326,11 +280,53 @@
                     config: {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                 })
                     .then(function (response) {
-
+                        that.demands.data = [];
+                        that.getMyDemands();
                     })
                     .catch(e => {
                         console.log(e);
                     });
+            },
+            getMyDemands() {
+                let that = this;
+                let dataLen = this.consumers.data.length;
+                let i = 0;
+                for (i = 0; i < dataLen; i++) {
+                    axios({
+                        method: 'get',
+                        url: 'http://localhost:8000/demand/getAllByUniPi/' + this.consumers.data[i].id,
+                    })
+                        .then(function (response) {
+                            if (response.data.length > 0) {
+                                // that.certificates.data.concat(response.data);
+                                that.demands.data = that.demands.data.concat(response.data);
+                            }
+
+                        })
+                        .catch(e => {
+                            console.log(e);
+                        });
+                }
+            },
+            getMyCertificates() {
+                let that = this;
+                let dataLen = this.demands.data.length;
+                let i = 0;
+                for (i = 0; i < dataLen; i++) {
+                    axios({
+                        method: 'get',
+                        url: 'http://localhost:8000/certificates/getAllByDemand/' + this.demands.data[i].id,
+                    })
+                        .then(function (response) {
+                            if (response.data.length > 0) {
+                                // that.certificates.data.concat(response.data);
+                                that.certificates.data = that.certificates.data.concat(response.data);
+                            }
+                        })
+                        .catch(e => {
+                            console.log(e);
+                        });
+                }
             }
         }
     }
