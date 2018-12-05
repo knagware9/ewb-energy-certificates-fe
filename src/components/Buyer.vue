@@ -243,8 +243,8 @@
                             console.log(e);
                         });
                 }
-                that.getPrice();
             });
+            this.getPrice();
         },
         methods: {
             setPrice() {

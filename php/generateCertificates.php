@@ -14,8 +14,8 @@ for ($i = 0; $i < $max; $i++) {
 
     $data = [
         'unipi' => $producers[$pIndex],
-        'kwhs' => rand(1, 3),
-        'minimalPrice' => rand(1, 6)/100
+        'kwhs' => rand(1, 2),
+        'minimalPrice' => rand(5, 10)/100
     ];
 
     sendPostRequest('http://localhost:8000/certificate/create', $data);

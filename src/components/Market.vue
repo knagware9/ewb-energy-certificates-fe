@@ -18,17 +18,20 @@
             </v-flex>
 
 
-            <v-flex xs12 sm6 offset-sm3 wrap>
-                <v-card xs3>
+            <v-flex xs4 sm2 offset-sm3>
+                <v-card color="#E8800F" style="display: flex; align-items: center; justify-content: center;">
                     <v-card-title primary-title>
                         <div>
                             <h3 class="headline mb-0">{{ numberOfCertificates }}</h3>
-                            <div># certificates</div>
+                            <div># KWh</div>
                         </div>
                     </v-card-title>
+
                 </v-card>
-                <p />
-                <v-card>
+            </v-flex>
+
+            <v-flex xs6 sm2 offset-sm1>
+                <v-card color="#E8800F" style="display: flex; align-items: center; justify-content: center;">
                     <v-card-title primary-title>
                         <div>
                             <h3 class="headline mb-0">{{ totalRevenue }}</h3>
@@ -40,23 +43,8 @@
             </v-flex>
 
             <v-flex xs12>
-                <v-card
-                        slot-scope="{ active, toggle }"
-                        :color="active ? 'primary' : ''"
-                        class="d-flex align-center"
-                        dark
-                        height="100"
-                >
-                    <v-card-title primary-title>
-                        <div>
-                            <h3 class="headline mb-0">{{ numberOfCertificates }}</h3>
-                            <div># certificates</div>
-                        </div>
-                    </v-card-title>
-
-                </v-card>
+                <div style="height: 30px"></div>
             </v-flex>
-
 
             <v-flex xs12>
                 <h2>Current volume & prices</h2>
@@ -187,7 +175,7 @@
                 let i;
                 let revenue = 0;
                 for(i = 0; i < len; i++) {
-                    revenue += this.salesData[i];
+                    revenue += parseInt(this.salesData[i]);
                 }
                 this.totalRevenue = revenue/100;
             }

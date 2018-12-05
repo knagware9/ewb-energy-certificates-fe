@@ -14,8 +14,8 @@ for ($i = 0; $i < $max; $i++) {
 
     $data = [
         'unipi' => $consumers[$pIndex],
-        'kwh' => rand(1, 3),
-        'price' => rand(1, 5)/100
+        'kwh' => rand(1, 2),
+        'price' => rand(4, 9)/100
     ];
 
     sendPostRequest('http://localhost:8000/demand/create', $data);
