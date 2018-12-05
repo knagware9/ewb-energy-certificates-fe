@@ -237,9 +237,9 @@
                     config: {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                 })
                     .then(function (response) {
-                        if (response.data === 'User updated successfully!') {
-                            that.priceUpdateSuccess.value = 'true'
-                        }
+                            //that.priceUpdateSuccess.value = 'true'
+                            that.certificates.data = [];
+                            that.getMyCertificates();
                     })
                     .catch(e => {
                         console.log(e);
