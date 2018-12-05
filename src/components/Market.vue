@@ -15,11 +15,16 @@
 
 
             <v-flex xs12>
-                <h2 class="display-2 font-weight-bold mb-3">Current market</h2>
+                <h2 class="display-2 font-weight-bold mb-3">Current prices</h2>
             </v-flex>
 
-            <v-flex xs12>
-                    <line-chart v-if="loaded" :chart-data="certificatePrices" :chart-labels="labels"></line-chart>
+            <v-flex xs6>
+                <bar-chart v-if="loaded" :chart-data="certificatePrices" :chart-labels="labels"
+                            :demand-data="demandData" :demand-chart-labels="labels"></bar-chart>
+            </v-flex>
+
+            <v-flex xs6>
+                <line-chart v-if="loaded" :sales-data="salesData" :sales-labels="salesLabels"></line-chart>
             </v-flex>
         </v-layout>
     </v-container>
@@ -28,9 +33,11 @@
 <script>
     import axios from 'axios'
     import LineChart from '@/components/LineChart'
+    import BarChart from '@/components/BarChart'
 
     export default {
         components: {
+            BarChart,
             LineChart
         },
         props: {},
@@ -40,31 +47,94 @@
                 period: 'last-month',
                 loaded: false,
                 certificatePrices: [],
+                demandData: [],
+                salesData: [],
+                salesLabels: [],
                 showError: false,
                 labels: [],
             }
         },
         mounted() {
-            this.requestData()
+            this.requestData(),
+                this.initReload();
         },
         methods: {
             resetState() {
-                this.loaded = false
+                //this.loaded = false
                 this.showError = false
+                this.certificatesReady = false;
+                this.demandsReady = false;
             },
-            requestData() {
-                this.resetState()
-                axios.get('https://www.4eyes.ch/certificates.json')
+            requestData(reload = false) {
+                this.resetState();
+                axios.get('http://localhost:8000/certificate/all')
                     .then(response => {
-                        console.log(response.data)
-                        this.certificatePrices = response.data.certificates.map(certificate => certificate.price*100),
-                        this.labels = new Array(50),
-                        this.loaded = true
-                    })
+                            let tmpData = response.data.map(certificate => certificate.minimalPrice * 100);
+                            let tmpPrices = response.data.map(certificate => certificate.sellingPrice * 100);
+                            console.log(tmpPrices);
+                            if (reload === true) {
+                                let numberOfElements = this.certificatePrices.length;
+
+                                tmpData.splice(0, numberOfElements);
+                                if (tmpData.length > 0) {
+                                    this.loaded = false;
+                                    this.certificatePrices.push(tmpData);
+                                }
+
+                                let numberOfPriceElements = this.salesData.length;
+                                tmpPrices.splice(0, numberOfPriceElements);
+                                if (tmpPrices.length > 0) {
+                                    this.loaded = false;
+                                    this.salesData.push(tmpData);
+                                }
+                            } else {
+                                this.loaded = false;
+                                this.certificatePrices = tmpData;
+                                this.salesData = tmpPrices;
+                            }
+                            this.labels = new Array(this.certificatePrices.length);
+                            this.salesLabels = new Array(this.salesData.length);
+                            this.certificatesReady = true;
+                            this.loaded = this.certificatesReady && this.demandsReady;
+
+                        }
+                    ).then(
+                    axios.get('http://localhost:8000/demand/all')
+                        .then(response => {
+                            let tmpData = response.data.map(demand => demand.price * 100);
+                            if (reload === true) {
+                                let numberOfElements = this.demandData.length;
+
+                                tmpData.splice(0, numberOfElements);
+                                if (tmpData.length > 0) {
+                                    this.loaded = false;
+                                    this.demandData.push(tmpData);
+                                }
+                            } else {
+                                this.loaded = false;
+                                this.demandData = tmpData;
+                            }
+                            this.demandsReady = true;
+                            this.loaded = this.certificatesReady && this.demandsReady;
+                        })
+                        .catch(err => {
+                            this.errorMessage = err.response.data.error
+                            this.showError = true
+                        })
+                )
                     .catch(err => {
                         this.errorMessage = err.response.data.error
                         this.showError = true
-                    })
+                    });
+
+
+            },
+            initReload() {
+                setInterval(this.reloadData, 1000);
+            }
+            ,
+            reloadData() {
+                this.requestData(true);
             }
         }
     }

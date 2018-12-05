@@ -4,12 +4,20 @@
     export default {
         extends: Bar,
         props: {
-            salesLabels: {
+            chartData: {
+                type: Array | Object,
+                required: false
+            },
+            chartLabels: {
                 type: Array,
                 required: false
             },
-            salesData: {
+            demandData: {
                 type: Array | Object,
+                required: false
+            },
+            demandLabels: {
+                type: Array,
                 required: false
             }
         },
@@ -44,17 +52,25 @@
         },
         mounted () {
             this.renderChart({
-                labels: this.salesLabels,
+                labels: this.chartLabels,
                 datasets: [
                     {
-                        label: 'Sale prices',
-                        borderColor: '#e8380f',
+                        label: 'Ask',
+                        borderColor: '#E8800F',
                         pointBackgroundColor: 'white',
-                        borderWidth: 2,
-                        pointBorderColor: '#e8380f',
-                        backgroundColor: 'transparent',
-                        data: this.salesData,
-                        type: 'line'
+                        borderWidth: 0,
+                        pointBorderColor: '#E8800F',
+                        backgroundColor: '#E8800F',
+                        data: this.chartData,
+                    },
+                    {
+                        label: 'Bid',
+                        borderColor: '#0fe880',
+                        pointBackgroundColor: 'white',
+                        borderWidth: 0,
+                        pointBorderColor: '#0fe880',
+                        backgroundColor: '#0fe880',
+                        data: this.demandData,
                     }
                 ]
             }, this.options)
