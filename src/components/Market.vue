@@ -13,14 +13,58 @@
                 ></v-img>
             </v-flex>
 
+            <v-flex xs12>
+                <h2 class="display-2 font-weight-bold mb-3">Current market</h2>
+            </v-flex>
+
+
+            <v-flex xs12 sm6 offset-sm3 wrap>
+                <v-card xs3>
+                    <v-card-title primary-title>
+                        <div>
+                            <h3 class="headline mb-0">{{ numberOfCertificates }}</h3>
+                            <div># certificates</div>
+                        </div>
+                    </v-card-title>
+                </v-card>
+                <p />
+                <v-card>
+                    <v-card-title primary-title>
+                        <div>
+                            <h3 class="headline mb-0">{{ totalRevenue }}</h3>
+                            <div>CHF earned</div>
+                        </div>
+                    </v-card-title>
+
+                </v-card>
+            </v-flex>
 
             <v-flex xs12>
-                <h2 class="display-2 font-weight-bold mb-3">Current prices</h2>
+                <v-card
+                        slot-scope="{ active, toggle }"
+                        :color="active ? 'primary' : ''"
+                        class="d-flex align-center"
+                        dark
+                        height="100"
+                >
+                    <v-card-title primary-title>
+                        <div>
+                            <h3 class="headline mb-0">{{ numberOfCertificates }}</h3>
+                            <div># certificates</div>
+                        </div>
+                    </v-card-title>
+
+                </v-card>
+            </v-flex>
+
+
+            <v-flex xs12>
+                <h2>Current volume & prices</h2>
             </v-flex>
 
             <v-flex xs6>
                 <bar-chart v-if="loaded" :chart-data="certificatePrices" :chart-labels="labels"
-                            :demand-data="demandData" :demand-chart-labels="labels"></bar-chart>
+                           :demand-data="demandData" :demand-chart-labels="labels"></bar-chart>
             </v-flex>
 
             <v-flex xs6>
@@ -52,11 +96,13 @@
                 salesLabels: [],
                 showError: false,
                 labels: [],
+                numberOfCertificates: 0,
+                totalRevenue: 0
             }
         },
         mounted() {
-            this.requestData(),
-                this.initReload();
+            this.requestData();
+            this.initReload();
         },
         methods: {
             resetState() {
@@ -130,11 +176,20 @@
 
             },
             initReload() {
-                setInterval(this.reloadData, 1000);
+                setInterval(this.reloadData, 3000);
             }
             ,
             reloadData() {
                 this.requestData(true);
+                this.numberOfCertificates = this.certificatePrices.length
+                let len;
+                len = this.salesData.length;
+                let i;
+                let revenue = 0;
+                for(i = 0; i < len; i++) {
+                    revenue += this.salesData[i];
+                }
+                this.totalRevenue = revenue/100;
             }
         }
     }

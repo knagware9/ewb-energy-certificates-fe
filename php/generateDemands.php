@@ -14,7 +14,7 @@ for ($i = 0; $i < $max; $i++) {
 
     $data = [
         'unipi' => $consumers[$pIndex],
-        'kwh' => rand(1, 30),
+        'kwh' => rand(1, 3),
         'price' => rand(1, 5)/100
     ];
 
