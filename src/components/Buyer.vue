@@ -15,18 +15,13 @@
 
             <v-flex xs12>
                 <h2 class="display-2 font-weight-bold mb-3">Buy certificates</h2>
-                <v-alert
-                        type="success"
-                        dismissible
-                        ref="priceUpdateSuccess"
-                >
-                    Price update was saved in the Blockchain.
-                </v-alert>
+            </v-flex>
+            <v-flex xs6>
                 <h2>Set price</h2>
                 <v-form>
                     <v-container>
-                        <v-layout row wrap>
-                            <v-flex xs12 sm6 md3>
+                        <v-layout row wrap align-self: center>
+                            <v-flex xs12>
                                 <v-text-field
                                         label="Price per certificate (1 KWh)"
                                         placeholder="0.02"
@@ -37,11 +32,9 @@
                                         box
                                         v-model="buyingPrice"
                                 ></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm6 md3>
+
                                 <v-btn color="success" v-on:click="this.setPrice">Set price</v-btn>
-                            </v-flex>
-                            <v-flex xs12 sm6 md3>
+
                                 <v-btn color="info" v-on:click="this.getPrice">Get price</v-btn>
                             </v-flex>
                         </v-layout>
@@ -49,32 +42,25 @@
                 </v-form>
             </v-flex>
 
-            <v-flex xs12>
-                <v-alert
-                        type="success"
-                        dismissible
-                        ref="priceUpdateSuccess"
-                >
-                    Price update was saved in the Blockchain.
-                </v-alert>
+            <v-flex xs6>
                 <h2>Compensate energy</h2>
                 <v-form>
                     <v-container>
                         <v-layout row wrap>
-                            <v-flex xs12 sm6 d-flex>
+                            <v-flex xs12>
                                 <v-select
                                         :items="consumers.data"
                                         item-value="id"
                                         item-text="name"
                                         box
-                                        label="Importer"
+                                        label="Importing smart meter"
                                         required
                                         v-model="exportUnipi"
                                 ></v-select>
                             </v-flex>
-                            <v-flex xs12 sm6 md3>
+                            <v-flex xs12>
                                 <v-text-field
-                                        label="Export energy (KWh)"
+                                        label="Import energy (KWh)"
                                         placeholder="10"
                                         type="number"
                                         min="1"
@@ -84,7 +70,7 @@
                                         v-model="exportKwh"
                                 ></v-text-field>
                             </v-flex>
-                            <v-flex xs12 sm6 md3>
+                            <v-flex xs12>
                                 <v-btn color="success" v-on:click="this.generateDemand">Compensate energy</v-btn>
                             </v-flex>
                         </v-layout>

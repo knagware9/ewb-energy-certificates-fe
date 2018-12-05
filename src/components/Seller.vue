@@ -16,18 +16,14 @@
 
             <v-flex xs12>
                 <h2 class="display-2 font-weight-bold mb-3">Sell certificates</h2>
-                <v-alert
-                        type="success"
-                        dismissible
-                        ref="priceUpdateSuccess"
-                >
-                    Price update was saved in the Blockchain.
-                </v-alert>
+            </v-flex>
+
+            <v-flex xs6>
                 <h2>Set price</h2>
                 <v-form>
                     <v-container>
-                        <v-layout row wrap>
-                            <v-flex xs12 sm6 md3>
+                        <v-layout row wrap align-self: center>
+                            <v-flex xs12>
                                 <v-text-field
                                         label="Price per certificate (1 KWh)"
                                         placeholder="0.02"
@@ -38,11 +34,7 @@
                                         box
                                         v-model="sellingPrice"
                                 ></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm6 md3>
                                 <v-btn color="success" v-on:click="this.setSellingPrice">Set price</v-btn>
-                            </v-flex>
-                            <v-flex xs12 sm6 md3>
                                 <v-btn color="info" v-on:click="this.getPrice">Get price</v-btn>
                             </v-flex>
                         </v-layout>
@@ -50,7 +42,7 @@
                 </v-form>
             </v-flex>
 
-            <v-flex xs12>
+            <v-flex xs6>
                 <v-alert
                         type="success"
                         dismissible
@@ -62,18 +54,18 @@
                 <v-form>
                     <v-container>
                         <v-layout row wrap>
-                            <v-flex xs12 sm6 d-flex>
+                            <v-flex xs12>
                                 <v-select
                                         :items="producers.data"
                                         item-value="id"
                                         item-text="name"
                                         box
-                                        label="Producer"
+                                        label="Exporting smart meter"
                                         required
                                         v-model="exportUnipi"
                                 ></v-select>
                             </v-flex>
-                            <v-flex xs12 sm6 md3>
+                            <v-flex xs12>
                                 <v-text-field
                                         label="Export energy (KWh)"
                                         placeholder="10"
@@ -85,7 +77,7 @@
                                         v-model="exportKwhs"
                                 ></v-text-field>
                             </v-flex>
-                            <v-flex xs12 sm6 md3>
+                            <v-flex xs12>
                                 <v-btn color="success" v-on:click="this.generateCertificates">Generate certificates
                                 </v-btn>
                             </v-flex>
