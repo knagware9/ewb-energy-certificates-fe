@@ -1,5 +1,8 @@
 # ewb-origin-fe
 
+This a quick frontend for the Hyperledger Fabric energy certificate platform
+developed during the [Energy Blockchain Hack](https://www.swisspower.ch/aktuell/news/2018/energy-blockchain-hack-48-stunden-42-smarte-koepfe-13-smarte-loesungen)
+
 ## Project setup
 ```
 npm install
@@ -9,21 +12,3 @@ npm install
 ```
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
