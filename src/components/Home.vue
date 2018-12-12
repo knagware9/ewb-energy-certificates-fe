@@ -1,5 +1,12 @@
 <template>
     <v-container>
+        <v-alert
+                :value="alert"
+                type="success"
+                transition="scale-transition"
+        >
+            This is a success alert.
+        </v-alert>
         <v-layout
                 text-xs-center
                 wrap
@@ -24,16 +31,16 @@
             <v-container>
                 <v-layout row wrap>
                     <v-flex xs12 sm6 md3>
-                        <v-btn color="success" v-on:click="this.createSeller">Create seller</v-btn>
+                        <v-btn color="success" :loading="loading1" :disabled="loading1" @click="loader = 'loading1'" v-on:click="this.createSeller">Create seller</v-btn>
                     </v-flex>
                     <v-flex xs12 sm6 md3>
-                        <v-btn color="success" v-on:click="this.createBuyer">Create buyer</v-btn>
+                        <v-btn color="success" :loading="loading2" :disabled="loading2" @click="loader = 'loading2'" v-on:click="this.createBuyer">Create buyer</v-btn>
                     </v-flex>
                     <v-flex xs12 sm6 md3>
-                        <v-btn color="success" v-on:click="this.createSellerUniPis">Create seller's unipis</v-btn>
+                        <v-btn color="success" :loading="loading3" :disabled="loading3" @click="loader = 'loading3'" v-on:click="this.createSellerUniPis">Create seller's unipis</v-btn>
                     </v-flex>
                     <v-flex xs12 sm6 md3>
-                        <v-btn color="success" v-on:click="this.createBuyerUniPis">Create buyers' unipis</v-btn>
+                        <v-btn color="success" :loading="loading4" :disabled="loading4" @click="loader = 'loading4'" v-on:click="this.createBuyerUniPis">Create buyers' unipis</v-btn>
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -42,11 +49,56 @@
 
 </template>
 
+<style>
+    .custom-loader {
+        animation: loader 1s infinite;
+        display: flex;
+    }
+    @-moz-keyframes loader {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    @-webkit-keyframes loader {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    @-o-keyframes loader {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    @keyframes loader {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
 <script>
     import axios from 'axios';
 
     export default {
         data: () => ({
+            loader: null,
+            loading1: false,
+            loading2: false,
+            loading3: false,
+            loading4: false,
+            alert: false,
             producers: {
                 data: [
                     {
@@ -104,8 +156,19 @@
                 ]
             },
         }),
+        watch: {
+            loader () {
+                const l = this.loader
+                this[l] = !this[l]
+
+                setTimeout(() => (this[l] = false), 3000)
+
+                this.loader = null
+            }
+        },
         methods: {
             createBuyer() {
+                this.alert = false;
                 let postBody = {
                     username: 'buyer',
                     name: "Max Köhler",
@@ -120,13 +183,14 @@
                     config: {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                 })
                     .then(function (response) {
-
+                        that.alert = true;
                     })
                     .catch(e => {
                         console.log(e);
                     });
             },
             createSeller() {
+                this.alert = false;
                 let postBody = {
                     username: 'seller',
                     name: "Miriam Müller",
@@ -141,13 +205,14 @@
                     config: {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                 })
                     .then(function (response) {
-
+                        that.alert = true;
                     })
                     .catch(e => {
                         console.log(e);
                     });
             },
             createSellerUniPis() {
+                this.alert = false;
                 for (var i = 0, len = this.producers.data.length; i < len; i++) {
                     let postBody = {
                         username: 'seller',
@@ -163,7 +228,7 @@
                         config: {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                     })
                         .then(function (response) {
-
+                            that.alert = true;
                         })
                         .catch(e => {
                             console.log(e);
@@ -171,6 +236,7 @@
                 }
             },
             createBuyerUniPis() {
+                this.alert = false;
                 for (var i = 0, len = this.consumers.data.length; i < len; i++) {
                     let postBody = {
                         username: 'buyer',
@@ -186,7 +252,7 @@
                         config: {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
                     })
                         .then(function (response) {
-
+                            that.alert = true;
                         })
                         .catch(e => {
                             console.log(e);
